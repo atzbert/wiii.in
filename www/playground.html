@@ -1,7 +1,8 @@
 <html>
   <head>
-    <meta charset="UTF-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"></script>
+	  <meta charset="UTF-8">
+    <link href="css/milligram.css" rel="stylesheet">
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
@@ -43,7 +44,7 @@
         });
         socket.on("m", function(message) {
           const messageType = message.substring(0, message.indexOf("~"));
-          if (messageType == CCC.STATIC.TYPE.CURRENTAGG) {
+          if (messageType === CCC.STATIC.TYPE.CURRENTAGG) {
             const res = CCC.CURRENT.unpack(message);
             if (res.PRICE) {
               document.querySelector('#ticker').innerHTML = res.PRICE + " €";
