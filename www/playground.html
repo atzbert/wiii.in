@@ -1,5 +1,6 @@
 <html>
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
     <script src="./CCC-helper.js"></script>
     <style>
@@ -17,21 +18,42 @@
     <div class="container">
       <h2>$$$ ETH to EUR $$$</h2>
       <h3 id="ticker">...</h3>
+      <table id="history">
+      </table>
     </div>
     <script>
-	    const socket = io.connect('https://streamer.cryptocompare.com/');
-      socket.on('connect', () => {
-        socket.emit('SubAdd', { subs: ['5~CCCAGG~ETH~EUR'] });
-      });
-      socket.on("m", function(message) {
-        const messageType = message.substring(0, message.indexOf("~"));
-        if (messageType == CCC.STATIC.TYPE.CURRENTAGG) {
-          const res = CCC.CURRENT.unpack(message);
-          if (res.PRICE) {
-            document.querySelector('#ticker').innerHTML = res.PRICE + " €";
+      function startSocket() {
+  	    const socket = io.connect('https://streamer.cryptocompare.com/');
+        socket.on('connect', () => {
+          socket.emit('SubAdd', { subs: ['5~CCCAGG~ETH~EUR'] });
+        });
+        socket.on("m", function(message) {
+          const messageType = message.substring(0, message.indexOf("~"));
+          if (messageType == CCC.STATIC.TYPE.CURRENTAGG) {
+            const res = CCC.CURRENT.unpack(message);
+            if (res.PRICE) {
+              document.querySelector('#ticker').innerHTML = res.PRICE + " €";
+            }
           }
-        }
-      });
+        });
+      }
+
+      function getHistorical() {
+        return axios.get('https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=EUR&limit=200&aggregate=1&e=CCCAGG')
+          .then((res) => {
+            const table = document.querySelector('#history');
+            table.innerHTML = "";
+            res.data.Data.forEach((entry) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `<td>${new Date(entry.time * 1000)}</td><td>${entry.open}</td>`;
+              table.append(row);
+            });
+          });
+      }
+
+
+      startSocket();
+      getHistorical();
     </script>
   </body>
 </html>
