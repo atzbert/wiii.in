@@ -1,30 +1,52 @@
+let fromPicker, toPicker, amountInput, datePicker;
 
 window.onload = () => {
+  fromPicker = document.querySelector('#fromSymPicker');
+  toPicker = document.querySelector('#toSymPicker');
+  amountInput = document.querySelector('#fromAmount');
+  datePicker = document.querySelector('#date');
+
   document.querySelector('#show-me-btn').addEventListener('click', () => {
-    const fromPicker = document.querySelector('#fromSymPicker');
     const fromSym = fromPicker.options[fromPicker.selectedIndex].value;
-    const toPicker = document.querySelector('#toSymPicker');
     const toSym = toPicker.options[toPicker.selectedIndex].value;
-    const fromAmount = parseFloat(document.querySelector('#fromAmount').value);
-    const startDate = document.querySelector('#date').value;
-    showDataFor(fromAmount, fromSym, toSym, startDate)
+    const amount = parseFloat(amountInput.value);
+    const startDate = datePicker.value;
+
+    showDataFor({amount, fromSym, toSym, startDate});
   });
 };
 
-const showDataFor = (amount, fromSym, toSym, startDate) => {
-  let nrAmount = parseFloat(amount);
-  let fromSymCap = fromSym.toUpperCase();
-  let toSymCap = toSym.toUpperCase();
+const showDataFor = (__opts) => {
+  const opts = {
+    amount: parseFloat(__opts.amount || 100),
+    fromSym: (__opts.fromSym || 'BTC').toUpperCase(),
+    toSym: (__opts.toSym || 'USD').toUpperCase(),
+    startDate: new Date(__opts.startDate || '01-01-2016'),
+  };
 
-  let daysBack = daysBetween(new Date(), new Date(startDate || "01-01-2016"));
+  let daysBack = daysBetween(new Date(), opts.startDate);
 
-  fetchDataFor(fromSymCap, toSymCap, daysBack).then((data) => {
-    let latestValue = data[data.length - 1].open;
-    let firstValue = data[0].open;
-    const factor =  nrAmount / firstValue;
-    document.querySelector('#value').innerHTML = Math.round((latestValue * factor) * 100) / 100 + ' ' + toSymCap;
+  updateUI(opts);
+
+  return fetchDataFor(opts.fromSym, opts.toSym, daysBack).then((data) => {
+    const firstValue = data[0].open;
+    const latestValue = data[data.length - 1].open;
+    const factor = opts.amount / firstValue;
+
+    let roundedNowValue = Math.round((latestValue * factor) * 100) / 100;
+
+    document.querySelector('#value').innerHTML = roundedNowValue + ' ' + opts.toSym;
     createChart(data.map((entry) => entry.open * factor));
+
+    return data;
   });
+};
+
+const updateUI = (opts) => {
+  fromPicker.value = opts.fromSym;
+  toPicker.value = opts.toSym;
+  amountInput.value = opts.amount;
+  datePicker.value = opts.startDate;
 };
 
 const fetchDataFor = (fromSym, toSym, daysBack) => {
@@ -35,11 +57,5 @@ const fetchDataFor = (fromSym, toSym, daysBack) => {
 
 const daysBetween = (date1, date2) => {
   const ONE_DAY = 1000 * 60 * 60 * 24;
-
-  const date1_ms = date1.getTime();
-  const date2_ms = date2.getTime();
-
-  const difference_ms = Math.abs(date1_ms - date2_ms);
-
-  return Math.round(difference_ms/ONE_DAY)
+  return Math.round(Math.abs(date1.getTime() - date2.getTime()) / ONE_DAY);
 };
