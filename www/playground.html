@@ -9,7 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/riot-route@3.1.2/index.min.js"></script>
 
     <script src="/js/CCC-helper.js"></script>
-    <script src="/js/js/chart-stuff.js"></script>
+    <script src="/js/chart-stuff.js"></script>
+    <script>
+      function createRoutes() {
+        route('/bitcoin/*/dollars', function(dollarAmount) {
+          console.log('The number of dollars' + dollarAmount)
+        });
+      }
+
+      createRoutes();
+    </script>
     <style>
         .container {
             margin: auto;
