@@ -22,7 +22,7 @@ const showDataFor = (amount, fromSym, toSym, startDate) => {
     let latestValue = data[data.length - 1].open;
     let firstValue = data[0].open;
     const factor =  nrAmount / firstValue;
-    document.querySelector('#value').innerHTML = (latestValue * factor) + ' ' + toSymCap;
+    document.querySelector('#value').innerHTML = Math.round((latestValue * factor) * 100) / 100 + ' ' + toSymCap;
     createChart(data.map((entry) => entry.open * factor));
   });
 };

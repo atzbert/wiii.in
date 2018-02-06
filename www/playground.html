@@ -15,7 +15,7 @@
     <script>
       function createRoutes() {
         route('/bitcoin/*/dollars', function(dollarAmount) {
-          console.log('The number of dollars' + dollarAmount)
+          console.log('The number of dollars' + dollarAmount);
         });
       }
 
@@ -24,7 +24,7 @@
     <style>
         .container {
             margin: auto;
-            max-width: 500px;
+            max-width: 900px;
             height: 300px;
             font-family: sans-serif;
             text-align: center;
@@ -48,32 +48,36 @@
 <body>
 
 <div class="container">
-    <h2>What if I invested in...</h2>
+    <div class="row">
+        <div class="column">
+            <h2>What if I invested in...</h2>
 
-    <select id="fromSymPicker">
-        <option value="ETH">ETH</option>
-        <option value="BTC">BTC</option>
-    </select>
+            <select id="fromSymPicker">
+                <option value="ETH">ETH</option>
+                <option value="BTC">BTC</option>
+            </select>
 
-    <h2>...the amount of...</h2>
+            <h2>...the amount of...</h2>
 
-    <input id="fromAmount" type="text" value="100">
-    <select id="toSymPicker">
-        <option value="EUR">EUR</option>
-        <option  value="USD">USD</option>
-    </select>
+            <input id="fromAmount" type="text" value="100">
+            <select id="toSymPicker">
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+            </select>
 
-    <h2>...back in...</h2>
+            <h2>...back in...</h2>
 
-    <input id="date" type="text" value="08-31-2017">
+            <input id="date" type="text" value="08-31-2017">
 
-    <h2>...?</h2>
+            <h2>...?</h2>
 
-    <button id="show-me-btn">Show me!</button>
-
-    <h2 id="value"></h2>
-
-    <div id="blockchain-chart" style="width:100%; height: 400px;"></div>
+            <button id="show-me-btn">Show me!</button>
+        </div>
+        <div class="column">
+            <h2 id="value"></h2>
+            <div id="blockchain-chart" style="width:100%; height: 400px;"></div>
+        </div>
+    </div>
 </div>
 
 </body>
