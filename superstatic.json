@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    {"source":"/playground","destination":"/playground.html"},
-    {"source":"/playground/**","destination":"/playground.html"}
+    {"source":"/","destination":"/playground.html"},
+    {"source":"/**","destination":"/playground.html"}
   ]
 }
