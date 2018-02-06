@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src="./CCC-helper.js"></script>
+    <script src="./js/chart-stuff.js"></script>
     <style>
         .container {
             margin: auto;
@@ -32,108 +32,8 @@
 <div class="container">
     <h2>$$$ ETH to EUR $$$</h2>
     <h3 id="ticker">...</h3>
-    <div class="ct-chart" style="width:300px; height: 300px;"></div>
-    <table id="history">
-    </table>
+    <div id="blockchain-chart" style="width:300px; height: 300px;"></div>
 </div>
 
-<script>
-  function startSocket() {
-    const socket = io.connect('https://streamer.cryptocompare.com/');
-    socket.on('connect', () => {
-      socket.emit('SubAdd', {subs: ['5~CCCAGG~ETH~EUR']});
-    });
-    socket.on('m', function(message) {
-      const messageType = message.substring(0, message.indexOf('~'));
-      if (messageType === CCC.STATIC.TYPE.CURRENTAGG) {
-        const res = CCC.CURRENT.unpack(message);
-        if (res.PRICE) {
-          document.querySelector('#ticker').innerHTML = res.PRICE + ' €';
-        }
-      }
-    });
-  }
-
-  function getHistorical() {
-    return axios.get(
-        'https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=EUR&limit=200&aggregate=1&e=CCCAGG').
-        then((res) => {
-          const table = document.querySelector('#history');
-          table.innerHTML = '';
-          res.data.Data.forEach((entry) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${new Date(entry.time * 1000)}</td><td>${entry.open}</td>`;
-            table.append(row);
-          });
-          createChart(res.data.Data);
-        });
-  }
-
-  startSocket();
-  getHistorical();
-</script>
-
-
-<script>
-  function createChart(data) {
-    var chart = new Chartist.Line('.ct-chart', {
-      series: [
-        data.map((entry) => entry.open),
-      ],
-    }, {
-      low: 0,
-      showLine: true,
-      axisX: {
-        showLabel: false,
-        offset: 0,
-      },
-      axisY: {
-        showLabel: false,
-        offset: 0,
-      },
-    });
-
-    // Let's put a sequence number aside so we can use it in the event callbacks
-    var seq = 0;
-
-    // Once the chart is fully created we reset the sequence
-    chart.on('created', function() {
-      seq = 0;
-    });
-
-    // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
-    chart.on('draw', function(data) {
-      if (data.type === 'line') {
-        // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-        data.element.animate({
-          opacity: {
-            // The delay when we like to start the animation
-            begin: seq + 1000,
-            // Duration of the animation
-            dur: 500,
-            // The value where the animation should start
-            from: 0,
-            // The value where it should end
-            to: 1,
-          },
-        });
-      } else if (data.type === 'point') {
-        // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-        data.element.animate({
-          opacity: {
-            // The delay when we like to start the animation
-            begin: seq++ * 5,
-            // Duration of the animation
-            dur: 25,
-            // The value where the animation should start
-            from: 0,
-            // The value where it should end
-            to: 1,
-          },
-        });
-      }
-    });
-  }
-</script>
 </body>
 </html>
