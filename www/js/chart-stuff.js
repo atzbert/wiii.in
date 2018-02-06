@@ -1,7 +1,7 @@
 
-const createChart = (data) => {
+const createChart = (values) => {
   const chart = new Chartist.Line('#blockchain-chart', {
-    series: [data],
+    series: [values],
   }, {
     low: 0,
     showLine: true,
@@ -24,7 +24,7 @@ const createChart = (data) => {
     if (data.type === 'line') {
       data.element.animate({
         opacity: {
-          begin: seq + 1000,
+          begin: (values.length * 5) + 50,
           dur: 500,
           from: 0,
           to: 1,
