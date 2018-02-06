@@ -6,7 +6,8 @@ window.onload = () => {
     const toPicker = document.querySelector('#toSymPicker');
     const toSym = toPicker.options[toPicker.selectedIndex].value;
     const fromAmount = parseFloat(document.querySelector('#fromAmount').value);
-    showDataFor(fromAmount, fromSym, toSym)
+    const startDate = document.querySelector('#date').value;
+    showDataFor(fromAmount, fromSym, toSym, startDate)
   });
 };
 
