@@ -11,11 +11,14 @@ window.onload = () => {
 };
 
 const showDataFor = (amount, fromSym, toSym) => {
-  fetchDataFor(fromSym, toSym).then((data) => {
+  let fromSymCap = fromSym.toUpperCase();
+  let toSymCap = toSym.toUpperCase();
+
+  fetchDataFor(fromSymCap, toSymCap).then((data) => {
     let latestValue = data[data.length - 1].open;
     let firstValue = data[0].open;
     const factor =  amount / firstValue;
-    document.querySelector('#value').innerHTML = (latestValue * factor) + ' ' + toSym;
+    document.querySelector('#value').innerHTML = (latestValue * factor) + ' ' + toSymCap;
     createChart(data.map((entry) => entry.open * factor));
   });
 };
