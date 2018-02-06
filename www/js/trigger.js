@@ -5,10 +5,18 @@ window.onload = () => {
     const fromSym = fromPicker.options[fromPicker.selectedIndex].value;
     const toPicker = document.querySelector('#toSymPicker');
     const toSym = toPicker.options[toPicker.selectedIndex].value;
-    fetchDataFor(fromSym, toSym).then((data) => {
-      document.querySelector('#value').innerHTML = data[data.length - 1].open + ' ' + toSym;
-      createChart(data);
-    });
+    const fromAmount = parseFloat(document.querySelector('#fromAmount').value);
+    showDataFor(fromAmount, fromSym, toSym)
+  });
+};
+
+const showDataFor = (amount, fromSym, toSym) => {
+  fetchDataFor(fromSym, toSym).then((data) => {
+    let latestValue = data[data.length - 1].open;
+    let firstValue = data[0].open;
+    const factor =  amount / firstValue;
+    document.querySelector('#value').innerHTML = (latestValue * factor) + ' ' + toSym;
+    createChart(data.map((entry) => entry.open * factor));
   });
 };
 

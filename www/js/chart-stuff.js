@@ -1,9 +1,7 @@
 
 const createChart = (data) => {
   const chart = new Chartist.Line('#blockchain-chart', {
-    series: [
-      data.map((entry) => entry.open),
-    ],
+    series: [data],
   }, {
     low: 0,
     showLine: true,
