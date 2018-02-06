@@ -1,16 +1,4 @@
 
-window.onload = () => {
-  document.querySelector('#draw-it-btn').addEventListener('click', () => {
-    fetchDataFor('ETH', 'EUR').then(createChart);
-  });
-};
-
-const fetchDataFor = (fromSym, toSym) => {
-  let url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + fromSym +
-      '&tsym=' + toSym + '&limit=200&aggregate=1&e=CCCAGG';
-  return axios.get(url).then((res) => res.data.Data);
-};
-
 const createChart = (data) => {
   const chart = new Chartist.Line('#blockchain-chart', {
     series: [

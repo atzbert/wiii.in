@@ -10,6 +10,8 @@
 
     <script src="/js/CCC-helper.js"></script>
     <script src="/js/chart-stuff.js"></script>
+    <script src="/js/trigger.js"></script>
+
     <script>
       function createRoutes() {
         route('/bitcoin/*/dollars', function(dollarAmount) {
@@ -47,9 +49,19 @@
 
 <div class="container">
     <h2>$$$ ETH to EUR $$$</h2>
-    <h3 id="ticker">...</h3>
+    <h3 id="value">...</h3>
+
     <div id="blockchain-chart" style="width:100%; height: 400px;"></div>
-    <button id="draw-it-btn">Draw chart!</button>
+
+    <select id="fromSymPicker">
+        <option value="ETH">ETH</option>
+        <option value="BTC">BTC</option>
+    </select>
+    <select id="toSymPicker">
+        <option value="EUR">EUR</option>
+        <option  value="USD">USD</option>
+    </select>
+    <button id="show-me-btn">Show me!</button>
 </div>
 
 </body>
